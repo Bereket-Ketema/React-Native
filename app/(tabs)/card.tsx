@@ -1,42 +1,40 @@
-import { View, Text, StyleSheet } from "react-native";
+import {View, Text, FlatList, StyleSheet} from 'react-native'
 
-export default function App() {
-  return (
+export default function List(){
+  const data = [
+    { id: "1", name: "Beki" },
+    { id: "2", name: "John" },
+    { id: "3", name: "Sara" },
+  ];
+  return(
     <View style={styles.container}>
-      <View style={[styles.box, styles.box1]}>
-        <Text>Box1</Text>
-      </View>
-      <View style={[styles.box, styles.box2]}>
-      <Text>Box2</Text>
-      </View>
-      <View style={[styles.box, styles.box3]}>
-      <Text>Box3</Text>
-      </View>
+      <FlatList
+        data = {data}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text style={styles.text}>Name: {item.name}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'column',
+    marginTop: 50,
   },
-  box: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100,
-    height: 100,
+  item: {
+    backgroundColor: "#eee",
+    padding: 15,
+    marginVertical: 8,
+    marginHorizontal: 16,
     borderRadius: 10,
-    margin: 8,
   },
-  box1: {
-    backgroundColor: '#e46060'
-  },
-  box2: {
-    backgroundColor: '#609ee4'
-  },
-  box3: {
-    backgroundColor: '#c1e460'
+  text: {
+    fontSize: 16,
   }
-});
+})
