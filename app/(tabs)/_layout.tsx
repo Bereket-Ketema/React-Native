@@ -22,6 +22,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <AntDesign name="credit-card" size={24} color="black" />,
         }}
       />
+      <Tabs.Screen
+        name="todo"
+        options={{
+        title: 'Todo',
+        tabBarIcon: ({ color }) => <AntDesign name="check-square" size={24} color="black" />,
+      }}
+    />
     </Tabs>
+
   );
 }
