@@ -4,7 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Todo() {
   const [task, setTask] = useState("");
-  const [data, setData] = useState<{id: string; task: string}[]>([]);
+  const [data, setData] = useState<{id: string; task: string; completed: boolean}[]>([]);
   function handleAdd(){
     if (task.trim() === ""){
       alert("Empty task!");
@@ -13,13 +13,22 @@ export default function Todo() {
 
     const newItem = {
       id: Date.now().toString(),
-      task: task
+      task: task,
+      completed: false
     }
 
     setData([...data, newItem]);
     setTask("");
-    
+  }
 
+  function toggleComplete(id: string) {
+    setData(
+      data.map(item =>
+        item.id === id
+          ? { ...item, completed: !item.completed }
+          : item
+      )
+    );
   }
     return (
       <View style={styles.container}>
@@ -34,18 +43,34 @@ export default function Todo() {
         </Pressable>
 
         <FlatList
-        data = {data}
-        keyExtractor = {(item) => item.id}
-        renderItem = {({item}) => (
-          <View style={styles.item}>
-            <Text>{item.task}</Text>
-            <Pressable onPress={() => {
-              setData(data.filter(i => i.id !== item.id))
-            } }>
-              <AntDesign name="delete" size={24} color="red" />
-            </Pressable>
-          </View>
-        )}
+          ListEmptyComponent={
+            <Text style={{ textAlign: "center", marginTop: 20 }}>
+              No tasks yet
+            </Text>
+          }
+          data = {data}
+          keyExtractor = {(item) => item.id}
+          renderItem = {({item}) => (
+            <View style={[
+              styles.item,
+              item.completed && { backgroundColor: "#d3ffd3" }
+            ]}>
+              <Pressable onPress={() => toggleComplete(item.id)}>
+                <Text style={[
+                  styles.text,
+                  item.completed && styles.completedText
+                ]}>
+                  {item.task}
+                </Text>
+              </Pressable>
+
+              <Pressable onPress={() => {
+                setData(data.filter(i => i.id !== item.id))
+              }}>
+                <AntDesign name="delete" size={24} color="red" />
+              </Pressable>
+            </View>
+          )}
         />
       </View>
     )
@@ -89,6 +114,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  text: {
+  fontSize: 16,
+  },
+  completedText: {
+    textDecorationLine: "line-through",
+    color: "gray",
   },
 
 })
